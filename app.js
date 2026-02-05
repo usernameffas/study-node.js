@@ -13,7 +13,7 @@ app.use('/api', indexRouter);
 const mongoURI = 'mongodb://localhost:27017/todo-demo';
 
 mongoose
-    .connect(mongoURI, { useNewUrlParser: true, useUnifiedTopology: true })
+    .connect(mongoURI)
     .then(() => {
         console.log('Mongodb connected!');
     })

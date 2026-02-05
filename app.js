@@ -1,27 +1,22 @@
-const express = require('express');
-const mongoose = require('mongoose'); // mongoose 임포트 확인!
+const express = require("express");
+const mongoose = require("mongoose");
 const app = express();
-const indexRouter = require('./route/index'); 
+const indexRouter = require("./routes/index");
+const bodyParser = require("body-parser");
+const cors = require("cors");
+require("dotenv").config();
+app.use(cors());
+app.use(bodyParser.urlencoded({ extended: false })); // 이게 있어야 req.body가 객체로 인식됨
+app.use(bodyParser.json()); // 이게 있어야 req.body가 객체로 인식됨
 
-// 1. 미들웨어 설정 (통역사)
-app.use(express.json()); // body-parser 대신 이 한 줄이면 충분합니다.
-
-// 2. 라우터 설정 (통로)
-app.use('/api', indexRouter);
-
-// 3. 데이터베이스 연결 (DB)
-const mongoURI = 'mongodb://localhost:27017/todo-demo';
+app.use("/api", indexRouter);
+const mongoURI = process.env.MONGODB_ALTAS;
 
 mongoose
-    .connect(mongoURI)
-    .then(() => {
-        console.log('Mongodb connected!');
-    })
-    .catch((err) => {
-        console.log('DB connection fail', err);
-    });
+  .connect(mongoURI, { useNewUrlParser: true })
+  .then(() => console.log("mongoose connected"))
+  .catch((err) => console.log("DB connection fail", err));
 
-// 4. 서버 실행
-app.listen(5000, () => {
-    console.log('Server is running on port 5000');
+app.listen(process.env.PORT || 5000, () => {
+  console.log("server on at 5000");
 });
